@@ -2,13 +2,15 @@
 <html>
 <head>
     <title th:text="${item.name}">Item</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<h1 th:text="${item.name}">Item</h1>
+<body class="container mt-4">
+<h1 class="mb-4" th:text="${item.name}">Item</h1>
 <p th:text="${item.description}"></p>
-<img th:if="${item.photoUrl}" th:src="${item.photoUrl}" alt="photo" style="max-width:200px;"/>
+<img th:if="${item.photoUrl}" th:src="${item.photoUrl}" alt="photo" class="img-fluid mb-3" style="max-width:200px;"/>
 <p>Contact: <span th:text="${item.contactInfo}"></span></p>
 <p>Status: <span th:text="${item.lost} ? 'Lost' : 'Safe'"></span></p>
-<img th:src="@{'/item/' + ${item.id} + '/qr'}" alt="QR Code"/>
+<img th:src="@{'/item/' + ${item.id} + '/qr'}" alt="QR Code" class="img-fluid mt-3"/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
