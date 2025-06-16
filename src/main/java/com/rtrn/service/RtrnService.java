@@ -15,16 +15,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class RtrnService {
-    private final UserRepository userRepo = new UserRepository();
-    private final ItemRepository itemRepo = new ItemRepository();
+    @Autowired
+    private UserRepository userRepo;
 
-    public User register(String name, String email, boolean premium) {
-        User user = new User(null, name, email, premium);
+    @Autowired
+    private ItemRepository itemRepo;
+
+    public User register(String name, String email, String password, boolean premium) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user = new User(null, name, email, encoder.encode(password), premium);
         return userRepo.save(user);
     }
 

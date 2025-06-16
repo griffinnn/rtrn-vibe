@@ -4,6 +4,7 @@ import com.rtrn.model.Item;
 import com.rtrn.model.User;
 import com.rtrn.service.RtrnService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,36 +16,40 @@ public class RtrnController {
     @Autowired
     private RtrnService service;
 
-    private User currentUser; // simplistic session substitute
-
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("user", currentUser);
+    public String index() {
         return "index";
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String name, @RequestParam String email, @RequestParam(defaultValue="false") boolean premium, Model model) {
-        currentUser = service.register(name, email, premium);
-        model.addAttribute("user", currentUser);
-        return "redirect:/dashboard";
+    public String register(@RequestParam String name,
+                           @RequestParam String email,
+                           @RequestParam String password,
+                           @RequestParam(defaultValue="false") boolean premium) {
+        service.register(name, email, password, premium);
+        return "redirect:/login";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-        model.addAttribute("user", currentUser);
-        model.addAttribute("items", currentUser != null ? service.getUserItems(currentUser) : null);
+    public String dashboard(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
+        model.addAttribute("items", user != null ? service.getUserItems(user) : null);
         return "dashboard";
     }
 
     @PostMapping("/items")
-    public String addItem(@RequestParam String name,
+    public String addItem(@AuthenticationPrincipal User user,
+                          @RequestParam String name,
                           @RequestParam String description,
                           @RequestParam String photoUrl,
-                          @RequestParam String contactInfo,
-                          Model model) {
-        if (currentUser == null) return "redirect:/";
-        service.addItem(currentUser, name, description, photoUrl, contactInfo);
+                          @RequestParam String contactInfo) {
+        if (user == null) return "redirect:/";
+        service.addItem(user, name, description, photoUrl, contactInfo);
         return "redirect:/dashboard";
     }
 
