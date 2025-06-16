@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Your Items</h1>
+<form action="/items" method="post">
+    <label>Name: <input type="text" name="name"/></label><br/>
+    <label>Description: <input type="text" name="description"/></label><br/>
+    <label>Photo URL: <input type="text" name="photoUrl"/></label><br/>
+    <label>Contact Info: <input type="text" name="contactInfo"/></label><br/>
+    <button type="submit">Add Item</button>
+</form>
+<ul>
+    <li th:each="item : ${items}">
+        <a th:href="@{'/item/' + ${item.id}}" th:text="${item.name}"></a>
+    </li>
+</ul>
+</body>
+</html>
