@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title th:text="${item.name}">Item</title>
+</head>
+<body>
+<h1 th:text="${item.name}">Item</h1>
+<p th:text="${item.description}"></p>
+<img th:if="${item.photoUrl}" th:src="${item.photoUrl}" alt="photo" style="max-width:200px;"/>
+<p>Contact: <span th:text="${item.contactInfo}"></span></p>
+<p>Status: <span th:text="${item.lost} ? 'Lost' : 'Safe'"></span></p>
+<img th:src="@{'/item/' + ${item.id} + '/qr'}" alt="QR Code"/>
+</body>
+</html>
